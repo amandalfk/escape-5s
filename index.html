@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escape 5S: Fábrica Trancada</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f1ea;--card:#fff;--ink:#1f2b36;--mut:#5d6b78;--line:#d8d4c7;--yel:#f2b705;--red:#d7263d;--grn:#2c8a57;--steel:#22303c;--on-steel:#f3f1ea;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161d24;--card:#212c36;--ink:#eee9dc;--mut:#9aa8b5;--line:#374451;--steel:#0e1318;--on-steel:#eee9dc}}
+*{box-sizing:border-box}html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Barlow,Arial,sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:800;line-height:1.05;margin:0 0 8px}
+h1{font-size:clamp(44px,12vw,84px)}h2{font-size:30px}h3{font-size:20px}
+.hero{background:var(--steel);color:var(--on-steel);padding:24px 20px;border-bottom:8px solid var(--yel);margin:0 -16px 12px}
+.hero p{max-width:52ch;margin:8px 0 0}
+.stripe{height:10px;background:repeating-linear-gradient(135deg,var(--yel) 0 14px,var(--steel) 14px 28px)}
+.card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--yel);padding:14px 16px;margin:12px 0;border-radius:4px}
+.fb{border-left-color:var(--grn)}.bad{border-left-color:var(--red)}
+.panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
+.ind{background:var(--steel);color:var(--on-steel);padding:8px 10px;border-radius:4px}
+.ind b{display:block;font:800 26px "Barlow Condensed",sans-serif}.ind small{opacity:.8}.ind.ok b{color:#6fd49a}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--steel);color:var(--on-steel);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 16px;margin:0 -16px;flex-wrap:wrap}
+.timer{font:800 34px "Barlow Condensed";color:var(--yel)}
+.doors{display:flex;gap:6px;flex-wrap:wrap}
+.door{border:2px solid var(--on-steel);border-radius:3px;padding:2px 8px;font:800 16px "Barlow Condensed";opacity:.6}
+.door.open{background:var(--grn);border-color:var(--grn);opacity:1}.door.cur{border-color:var(--yel);opacity:1}
+button{font:600 16px Barlow,sans-serif;cursor:pointer;border:2px solid var(--steel);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:4px;min-height:44px}
+button.go{background:var(--yel);color:#1f2b36;border-color:#1f2b36}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+input[type=text]{width:100%;font:inherit;padding:9px;border:2px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+select{font:inherit;padding:8px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:4px}
+.opt{display:block;border:2px solid var(--line);border-radius:4px;padding:10px;margin:6px 0;cursor:pointer}
+.opt:has(input:checked){border-color:var(--steel);background:color-mix(in srgb,var(--yel) 25%,var(--card))}
+.item{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0}
+.item .n{flex:1 1 200px;font-weight:600}.item label{white-space:nowrap}
+.tag{display:inline-block;background:var(--red);color:#fff;font:800 14px "Barlow Condensed";padding:2px 8px;border-radius:2px}
+.muted{color:var(--mut);font-size:14px}
+.code{font:800 56px "Barlow Condensed";letter-spacing:8px}
+.pile,.zones{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{padding:6px 12px;min-height:36px}.chip.sel,.zone.sel{background:var(--yel);color:#1f2b36}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bin{border:2px dashed var(--line);border-radius:4px;padding:8px;min-height:100px;cursor:pointer}.bin.N{border-color:var(--grn)}.bin.D{border-color:var(--red)}.bin.O{border-color:var(--yel)}.bin .chip{margin:2px}
+.zone{flex:1 1 110px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px}.zone.good{border-color:var(--grn)}
+.meter{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.meter i{display:block;height:100%;background:var(--red);transition:width .3s}
+.act{display:block;width:100%;text-align:left;margin:6px 0}
+@media(max-width:520px){.bins{grid-template-columns:1fr}}
+
+:root:not([data-theme="x"]){--bg:#14102b;--card:#231c4a;--ink:#f4f0ff;--mut:#a79fd0;--line:#4a3f8a;--yel:#ffd23f;--red:#ff4d6d;--grn:#3ddc97;--steel:#0b0820;--on-steel:#f4f0ff}
+body{background-color:var(--bg);background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px);background-size:32px 32px}
+h1,h2,h3,.timer,.lv,button.go,.tag{font-family:"Press Start 2P",monospace;font-weight:400;letter-spacing:0}
+h1{font-size:clamp(22px,7vw,40px);line-height:1.3;color:var(--yel);text-shadow:4px 4px 0 #000}h2{font-size:16px;line-height:1.5}h3{font-size:13px;line-height:1.5;color:var(--yel)}
+.card{border:3px solid #000;border-radius:0;box-shadow:5px 5px 0 #000}
+.hero{border:3px solid #000;box-shadow:5px 5px 0 #000;background:var(--card);margin:12px 0}
+.hero h1,.hero h2{color:var(--yel)}
+button{border:3px solid #000;border-radius:0;box-shadow:0 4px 0 #000;transition:transform .05s}button:active{transform:translateY(4px);box-shadow:none}
+button.go{background:var(--yel);color:#000;font-size:12px;padding:14px 18px}
+.bar{background:#000;border-bottom:3px solid var(--yel);font-weight:600}.timer{font-size:20px;color:var(--yel)}.lv{font-size:11px;color:var(--grn)}
+.chip{background:var(--card);color:var(--ink);font-size:13px;line-height:1.2;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:92px;padding:8px}.em{font-size:32px;line-height:1.1}
+.bin{border-width:3px;background:#0003}.opt{border:3px solid #000;border-radius:0;background:#0002}
+.sb{display:flex;align-items:center;gap:8px;margin:6px 0}.sb .t{flex:1;height:16px;background:#000;border:2px solid #000}.sb .t i{display:block;height:100%;transition:width .4s}.sb b{min-width:84px;text-align:right;font-size:14px}
+.map{display:flex;align-items:center;margin:14px 0}.node{flex:none;width:46px;height:46px;border:3px solid #000;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:3px 3px 0 #000;border-radius:50%}
+.node.done{background:var(--grn)}.node.cur{background:var(--yel);animation:pulse 1s infinite}.node.lock{opacity:.55;filter:grayscale(1)}
+.path{flex:1;height:6px;min-width:4px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px)}
+.mascot{display:flex;gap:12px;align-items:flex-start}.face{font-size:54px;animation:float 2s ease-in-out infinite}
+.bubble{background:#fff;color:#1a1a2e;border:3px solid #000;padding:10px 12px;position:relative;font-size:15px;flex:1}.bubble:before{content:"";position:absolute;left:-15px;top:18px;border:7px solid transparent;border-right:8px solid #000}
+.stars{font-size:48px;animation:pop .6s}.blink{animation:blink 1s steps(2) infinite}
+.card.bad{animation:shake .4s}.card.fb{animation:pop .3s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.1)}}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes pulse{50%{transform:scale(1.15)}}
+@keyframes blink{50%{opacity:.4}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<main id="app"></main>
+<script>
+const $=s=>document.querySelector(s);
+const START={prod:60,rw:25,cyc:50,cash:5000};
+let S,timer;
+const sh=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const clamp=v=>Math.max(0,v);
+const val=n=>(document.querySelector(`[name=${n}]:checked`)||{}).value;
+const opts=(n,l)=>l.map(o=>`<label class="opt"><input type="radio" name="${n}" value="${o[0]}"> ${o[1]}</label>`).join("");
+const CODE=["3","7","1","9","4"];
+
+const ROOMS=[
+{s:"Seiri",n:"Sala dos Refugos",st:"A porta do depósito trava com um cadeado de etiquetas. Só abre quando os itens inúteis forem separados dos necessários.",hint:"Moldes e peças em uso, EPI e ferramenta afiada são necessários. Itens quebrados, antigos ou vencidos vão para descarte."},
+{s:"Seiton",n:"Corredor do Vai e Vem",st:"O corredor tem 5 postos e as ferramentas estão em lugares errados. O portão só destrava quando cada uma estiver onde é usada.",hint:"Pense no nome da ferramenta: ela é usada na operação do posto correspondente."},
+{s:"Seiso",n:"Sala das Máquinas",st:"Há sujeira por toda parte, e o painel exige que você ache a causa, não só limpe.",hint:"A resposta mais completa é a que impede a sujeira de voltar."},
+{s:"Seiketsu",n:"Sala de Benchmarking",st:"Um monitor mostra a prática da Toyota. O cofre só abre se você comparar e adaptar a prática à MetalPlast.",hint:"Kanban completo custa caro para a MetalPlast. Adapte de forma simples e barata."},
+{s:"Shitsuke",n:"Sala da Auditoria",st:"Duas semanas depois da arrumação, o último portão pede uma auditoria. Aponte onde os hábitos falharam.",hint:"Marque só o que fere o padrão: acúmulo de sujeira, checklist sem assinatura e etiqueta esquecida."}];
+
+const ITEMS=[["Molde do produto atual","N"],["Peça em uso na linha","N"],["EPI novo","N"],["Ferramenta de corte afiada","N"],["Fita adesiva reserva","O"],["Molde de produto sazonal","O"],["Calendário de 2019","D"],["Parafusos danificados","D"],["Panfleto antigo","D"],["Ferramenta quebrada","D"]];
+const TOOLS=[["Serra","Corte"],["Gabarito de dobra","Dobra"],["Eletrodo","Solda"],["Pistola de tinta","Pintura"],["Fita de embalagem","Embalagem"]];
+const POSTS=["Corte","Dobra","Solda","Pintura","Embalagem"];
+const DIRT=[["Poça de óleo sob a prensa","Limpar o chão","Trocar a vedação que vaza"],["Cavaco espalhado no chão","Varrer o cavaco","Instalar coletor na saída da máquina"],["Lixeira cheia no corredor","Esvaziar a lixeira","Criar lixeiras por tipo e coleta a cada turno"],["Poeira nas máquinas","Passar um pano","Vedar a proteção e criar rotina de limpeza"],["Caixas no corredor","Empurrar as caixas para o canto","Demarcar uma área própria para caixas"]];
+const AUD=[["Etiquetas das prateleiras seguem o padrão",0],["Ferramentas voltaram ao painel após o uso",0],["Cavaco acumulado de novo sob a máquina",1],["Checklist de limpeza sem assinatura há 5 dias",1],["Etiquetas vermelhas ainda penduradas em itens no posto",1],["Operadores usam o POP de 1 página",0]];
+
+const DEC=[
+{t:"Pedido urgente",q:"Um cliente pede um lote para amanhã. Há uma porta de serviço aberta no depósito.",a:["Aceitar sem organizar antes",{cash:500,rw:5},"+R$ 500, mas retrabalho sobe"],b:["Recusar e organizar antes",{prod:10},"Produtividade +10"]},
+{t:"Layout",q:"Como mudar o layout da fábrica?",a:["Mudar toda a fábrica",{cash:-1000,cyc:-12},"-R$ 1.000, ciclo -12 min"],b:["Mudar só os 2 postos críticos",{cash:-200,cyc:-6},"-R$ 200, ciclo -6 min"]},
+{t:"Limpeza",q:"Quem vai manter a fábrica limpa?",a:["Contratar limpeza terceirizada",{cash:-600},"-R$ 600, sem criar hábito"],b:["Rodízio de 5 min de limpeza por turno",{pts:5,prod:2},"R$ 0, +5 pts de disciplina"]},
+{t:"Padronização",q:"Como registrar o procedimento?",a:["POP detalhado de 20 páginas",{rw:-1},"Pouca adesão: retrabalho -1"],b:["POP visual de 1 página com fotos",{rw:-5},"Alta adesão: retrabalho -5"]},
+{t:"Erros recorrentes",q:"O que fazer com os erros que se repetem?",a:["Punir os operadores",{rw:-2,prod:-5},"Moral baixa: produtividade -5"],b:["Treinamento de 1 hora",{cash:-300,rw:-8,prod:5},"-R$ 300, retrabalho -8, produtividade +5"]}];
+
+function fxText(f){const n={prod:"produtividade",rw:"retrabalho",cyc:"ciclo",cash:"caixa",pts:"pontos"};return Object.entries(f).filter(e=>e[1]).map(([k,v])=>`${n[k]} ${v>0?"+":""}${v}`).join(", ")||"nenhum"}
+function apply(f){for(const k in f){if(k==="pts")S.pts+=f[k];else S.v[k]=clamp(S.v[k]+f[k])}S.v.rw=Math.min(100,S.v.rw)}
+const mmss=t=>String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0");
+
+const EMJ=["🧱","⚙️","🦺","✂️","📼","🎄","📅","🔩","📰","🔨"],TE=["🪚","📐","⚡","🎨","📦"],RE=["🗑️","📍","🧽","🏭","🕵️"];
+let AC;function sfx(k){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),m={tap:[520,.05],ok:[880,.2],bad:[140,.3],key:[1250,.4]}[k];o.type="square";o.frequency.value=m[0];g.gain.value=.04;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+m[1])}catch(e){}}
+function sb(i,txt,p,ok){return `<div class="sb"><span>${i}</span><div class="t"><i style="width:${Math.max(0,Math.min(100,p))}%;background:${ok?"var(--grn)":"var(--yel)"}"></i></div><b>${txt}</b></div>`}
+function bar(){return `<div class="bar"><span class="lv">NÍVEL ${Math.min(S.r+1,5)}/5</span><span>⭐ ${S.pts}</span><span>${CODE.map((c,i)=>i<S.r||S.ph==="door"?"🔑":"🔒").join("")}</span><span class="timer" id="tm">${mmss(S.t)}</span></div>`}
+function panel(){const v=S.v;return `<div class="card">${sb("⚙️",v.prod+"/100",v.prod,v.prod>=100)}${sb("♻️",v.rw+"%",100-(v.rw-10)*6.6,v.rw<=10)}${sb("⏱️",v.cyc+" min",100-(v.cyc-30)*5,v.cyc<=30)}${sb("💰","R$ "+v.cash,v.cash/50,v.cash>0)}<span class="muted">Barra cheia = meta batida</span></div>`}
+function mapHTML(){return `<div class="map">${ROOMS.map((r,i)=>`<div class="node ${i<S.r?"done":i===S.r?"cur":"lock"}">${i<S.r?"🔑":RE[i]}</div><div class="path"></div>`).join("")}<div class="node lock">🚪</div></div>`}
+function home(){clearInterval(timer);
+$("#app").innerHTML=`<div class="hero" style="text-align:center"><div class="stars" style="font-size:60px">🏭🔐</div><h1>ESCAPE 5S</h1><h3>Fábrica Trancada</h3></div>
+<div class="card mascot"><div class="face">👷</div><div class="bubble">Oi, eu sou o Beto, gerente da MetalPlast! A fábrica travou e só abre com as <b>5 chaves dos 5S</b>. Resolvam as 5 fases antes do tempo acabar!</div></div>
+<div class="card"><h3>Como jogar</h3><p>🕹️ Toque ou arraste os itens em cada fase.<br>🔑 Fase resolvida = uma chave.<br>⏱️ Erro custa 30 s. Pista custa 60 s e 2 pontos.<br>🎯 Depois de cada fase, uma decisão muda a fábrica.</p></div>
+<div class="card"><label>Nome da equipe<input type="text" id="team" placeholder="Ex.: Consultores Alfa" maxlength="30"></label><br><button class="go blink" onclick="start()">▶ START</button></div>
+<p class="muted">Benchmarking real: Sistema Toyota de Produção (OHNO, Taiichi. <i>O Sistema Toyota de Produção</i>).</p>`}
+
+function start(){S={team:$("#team").value||"Equipe",r:0,ph:"intro",v:{...START},pts:0,t:1500,tries:0};render();clearInterval(timer);
+timer=setInterval(()=>{S.t--;const e=$("#tm");if(e)e.textContent=mmss(Math.max(S.t,0));if(S.t<=0)end(false)},1000)}
+
+function render(msg){const R=ROOMS[S.r]||{};let h=bar();
+if(S.ph==="intro")h+=`${mapHTML()}<div class="card mascot"><div class="face">👷</div><div class="bubble"><b>Fase ${S.r+1}: ${R.n}</b><br>${R.st}</div></div>${panel()}<button class="go" onclick="S.ph='room';render()">▶ ENTRAR NA SALA</button>`;else if(S.ph==="room")h+=`<div class="hero"><h2>Sala ${S.r+1}: ${R.n}</h2><b>${R.s}</b><p>${R.st}</p></div>${panel()}${chalHTML()}`;
+else if(S.ph==="dec"){const d=DEC[S.r];h+=`<div class="hero"><h2>Chave ${CODE[S.r]} conquistada</h2><p>Antes de seguir, uma decisão.</p></div>${panel()}${msg||""}<div class="card"><h3>Decisão: ${d.t}</h3><p>${d.q}</p>${[["a",d.a],["b",d.b]].map(([k,o])=>`<button style="display:block;width:100%;text-align:left;margin:8px 0" onclick="choose('${k}')"><b>${o[0]}</b><br><span class="muted">${o[2]}</span></button>`).join("")}</div>`}
+else h+=`<div class="hero"><h2>Portão final</h2><p>Digite as 5 chaves na ordem das salas (Seiri a Shitsuke).</p></div>${panel()}${msg||""}<div class="card"><p class="muted">Chaves coletadas: ${CODE.map((c,i)=>`Sala ${i+1}: <b>${c}</b>`).join(" · ")}</p><label>Código<input type="text" id="cd" inputmode="numeric" maxlength="5" autocomplete="off"></label><br><button class="go" onclick="door()">Abrir portão</button><div id="res"></div></div>`;
+$("#app").innerHTML=h;window.scrollTo(0,0)}
+
+const EM3=["🛢️","⚙️","🗑️","🌫️","📦"],EM5=["🏷️","🔧","🧹","📋","🔴","📄"];
+const KB=[["Cartões de reposição nas prateleiras",100,1],["Quadro Kanban visual na parede",150,1],["Treinar os 12 operadores (1 h)",300,1],["Etiquetas de local nas prateleiras",100,1],["Sistema eletrônico completo",3000,0],["Estoque extra de segurança",800,0]];
+const dist=z=>z.reduce((a,t,p)=>a+Math.abs(t-p),0);
+function upd(){sfx("tap");$("#play").innerHTML=V[S.r]()}
+function put(b){const u=S.u;if(u.s==null)return;u.c[u.s]=b;u.s=null;upd()}
+function swap(p){const u=S.u;if(u.s==null)u.s=p;else{[u.z[u.s],u.z[p]]=[u.z[p],u.z[u.s]];u.s=null}upd()}
+function act(v){const u=S.u,i=u.k;if(v===3){u.d[i]=1;u.p+=3;u.k=null;u.o=null;u.msg="<p>✅ Fonte eliminada: a sujeira não volta.</p>"}else if(v===1){S.t-=10;u.o=null;u.msg="<p><b>A sujeira voltou!</b> Vocês só limparam o efeito. -10 s</p>"}else{S.t-=20;u.msg="<p><b>Deixar para depois piorou a situação.</b> -20 s</p>"}upd()}
+function mark(x){S.u.v[S.u.k]=x;S.u.k=null;upd()}
+const V=[
+()=>{const u=S.u;u.c=u.c||{};return `<p>Toque num item e depois na caixa onde ele vai (toque num item da caixa para devolver). Mínimo: 7 de 10 certos. Descartar item necessário gera parada de linha.</p><div class="pile">${ITEMS.map((it,i)=>u.c[i]?"":`<button class="chip ${u.s===i?"sel":""}" draggable="true" ondragstart="S.u.s=${i}" onclick="S.u.s=${i};upd()"><span class="em">${EMJ[i]}</span>${it[0]}</button>`).join("")||"<i class=muted>Tudo classificado.</i>"}</div><div class="bins">${[["N","Necessário"],["O","Ocasional"],["D","Descartar"]].map(b=>`<div class="bin ${b[0]}" ondragover="event.preventDefault()" ondrop="put('${b[0]}')" onclick="put('${b[0]}')"><b>${b[1]}</b><div>${ITEMS.map((it,i)=>u.c[i]===b[0]?`<button class="chip" onclick="event.stopPropagation();delete S.u.c[${i}];upd()"><span class="em">${EMJ[i]}</span>${it[0]}</button>`:"").join("")}</div></div>`).join("")}</div>`},
+()=>{const u=S.u;if(!u.z){do{u.z=sh([0,1,2,3,4])}while(dist(u.z)<8)}return `<p>As ferramentas estão em postos errados e o operador anda demais. Toque em duas ferramentas para trocá-las de lugar. Cada uma deve ficar no posto onde é usada.</p><div class="zones">${u.z.map((t,p)=>`<button class="zone ${u.s===p?"sel":""} ${t===p?"good":""}" draggable="true" ondragstart="S.u.s=${p}" ondragover="event.preventDefault()" ondrop="swap(${p})" onclick="swap(${p})"><small>Posto ${POSTS[p]}</small><span class="em">${TE[t]}</span><b>${TOOLS[t][0]}</b></button>`).join("")}</div><p><b>Trajeto do operador: ${dist(u.z)} passos</b> (meta: até 2)</p><div class="meter"><i style="width:${Math.min(100,dist(u.z)*100/12)}%"></i></div>`},
+()=>{const u=S.u;u.d=u.d||{};u.p=u.p||0;return `<p>Procure os 5 pontos de sujeira. Toque em um deles e escolha a ação. Só limpar o chão não resolve: a sujeira volta.</p><div class="zones">${DIRT.map((d,i)=>`<button class="zone ${u.d[i]?"good":""}" onclick="S.u.k=${i};S.u.o=null;S.u.msg='';upd()" ${u.d[i]?"disabled":""}><span style="font-size:34px">${u.d[i]?"✅":EM3[i]}</span><small>${d[0]}</small></button>`).join("")}</div>${u.k!=null?`<div class="card"><b>${DIRT[u.k][0]}</b>${(u.o=u.o||sh([[DIRT[u.k][1],1],[DIRT[u.k][2],3],["Deixar para o próximo turno",0]])).map(o=>`<button class="act" onclick="act(${o[1]})">${o[0]}</button>`).join("")}</div>`:""}${u.msg||""}`},
+()=>{const u=S.u;u.k=u.k||{};const cost=KB.reduce((a,k,i)=>a+(u.k[i]?k[1]:0),0),good=KB.filter((k,i)=>u.k[i]&&k[2]).length;return `<p><b>Referência real:</b> a Toyota usa o <b>Kanban</b>: cartões sinalizam a reposição de material somente quando ele é consumido, evitando estoque excessivo e movimentação inútil.</p><p><b>MetalPlast:</b> 12 operadores, ferramentas e peças espalhadas, ciclo de 50 min e orçamento de R$ 1.000 para esta melhoria.</p><b>A prática é adequada?</b><label class="opt"><input type="radio" name="q2" ${u.q2==="a"?"checked":""} onchange="S.u.q2='a'"> Sim, copiar o sistema inteiro</label><label class="opt"><input type="radio" name="q2" ${u.q2==="b"?"checked":""} onchange="S.u.q2='b'"> Parcialmente: adaptar à nossa realidade</label><label class="opt"><input type="radio" name="q2" ${u.q2==="c"?"checked":""} onchange="S.u.q2='c'"> Não é adequada</label><b>Monte a adaptação:</b>${KB.map((k,i)=>`<label class="opt"><input type="checkbox" ${u.k[i]?"checked":""} onchange="S.u.k[${i}]=this.checked;upd()"> ${k[0]} <b>R$ ${k[1]}</b></label>`).join("")}<div class="meter"><i style="width:${Math.min(100,cost/10)}%"></i></div><p><b>Custo: R$ ${cost}</b> de 1.000 · Ciclo estimado: -${3*good} min</p>`},
+()=>{const u=S.u;u.v=u.v||{};return `<p>Inspecione a fábrica duas semanas depois. Toque em cada objeto, leia a observação e classifique. Mínimo: 5 de 6 corretos.</p><div class="zones">${AUD.map((a,i)=>`<button class="zone" onclick="S.u.k=${i};upd()"><span style="font-size:34px">${u.v[i]==null?EM5[i]:u.v[i]?"⚠️":"✅"}</span></button>`).join("")}</div>${u.k!=null?`<div class="card"><b>${AUD[u.k][0]}</b><br><button onclick="mark(0)">Conforme</button> <button onclick="mark(1)">Falha</button></div>`:""}`}];
+function chalHTML(){S.u={};return `<div class="card"><h3>Desafio</h3><div id="play">${V[S.r]()}</div><button class="go" onclick="tryRoom()">Testar a chave</button> <button onclick="hint()">Pedir pista (-60 s)</button><div id="res"></div></div>`}
+function res(c,m){sfx(c==="bad"?"bad":"ok");$("#res").innerHTML=`<div class="card ${c}">${m}</div>`}
+function hint(){S.t-=60;S.pts-=2;$("#res").innerHTML=`<div class="card"><b>Pista:</b> ${ROOMS[S.r].hint}</div>`}
+
+function tryRoom(){const r=S.r,u=S.u;let ok=false,fx={},msg="";
+if(r===0){if(Object.keys(u.c).length<10)return res("bad","Classifiquem todos os itens antes de testar a chave.");let c=0,lost=0;ITEMS.forEach((it,i)=>{if(u.c[i]===it[1])c++;else if(u.c[i]==="D"&&it[1]==="N")lost++});ok=c>=7;fx={pts:c*2,prod:c,cash:-300*lost};msg=`${c} de 10 corretos.${lost?` ${lost} item(ns) necessário(s) descartado(s): parada de linha.`:""}`}
+else if(r===1){const c=u.z.filter((t,p)=>t===p).length;ok=dist(u.z)<=2;fx={pts:c*2,prod:c*2,cyc:-c};msg=`Trajeto de ${dist(u.z)} passos.`}
+else if(r===2){if(Object.keys(u.d).length<5)return res("bad","Ainda há pontos de sujeira. Eliminem a fonte de todos.");ok=true;fx={pts:u.p,rw:-5,prod:10};msg="Todas as fontes de sujeira foram eliminadas."}
+else if(r===3){const good=KB.filter((k,i)=>u.k[i]&&k[2]).length,bad=KB.filter((k,i)=>u.k[i]&&!k[2]).length,cost=KB.reduce((a,k,i)=>a+(u.k[i]?k[1]:0),0);ok=u.q2==="b"&&good>=3&&!bad&&cost<=1000;fx={pts:5+good*3,cyc:-3*good,cash:-cost};msg=ok?"Adaptação barata e eficaz: reforça Seiton e Seiketsu.":"A prática deve ser considerada parcialmente adequada, caber em R$ 1.000, ter ao menos 3 ações úteis e nenhuma que contrarie o Kanban."}
+else{if(Object.keys(u.v).length<6)return res("bad","Inspecionem todos os 6 objetos.");let c=0;AUD.forEach((a,i)=>{if(u.v[i]===a[1])c++});ok=c>=5;fx={pts:c*3,rw:c===6?-3:0};msg=`${c} de 6 avaliações corretas.`}
+if(!ok){S.t-=30;return res("bad",`<b>Trancado.</b> ${msg} -30 s. Revisem e tentem de novo.`)}
+apply(fx);sfx("key");S.ph="dec";render(`<div class="card fb"><b>Sala aberta!</b> ${msg}<br><span class="muted">Efeitos: ${fxText(fx)}.</span></div>`)}
+
+function choose(k){const d=DEC[S.r],o=d[k];apply(o[1]);const m=`<div class="card fb">Decisão anterior: ${o[0]} (${fxText(o[1])}).</div>`;
+if(S.r<4){S.r++;S.ph="intro";render();$("#app").insertAdjacentHTML("beforeend",m)}else{S.ph="door";render(m)}}
+
+function door(){if($("#cd").value.replace(/\D/g,"")===CODE.join(""))end(true);else{S.t-=30;$("#res").innerHTML=`<div class="card bad">Código errado: -30 s. Confira a ordem das salas.</div>`}}
+
+function end(win){clearInterval(timer);const v=S.v;let b=0;const L=[];
+if(win){const tb=Math.floor(S.t/60);b+=tb;L.push(`Tempo que sobrou: +${tb}`)}
+if(v.prod>=100){b+=15;L.push("Produtividade ≥ 100: +15")}if(v.rw<=10){b+=15;L.push("Retrabalho ≤ 10%: +15")}
+if(v.cyc<=30){b+=15;L.push("Ciclo ≤ 30 min: +15")}if(v.cash>0){b+=5;L.push("Caixa positivo: +5")}
+const tot=S.pts+b,lv=tot>140?"Fábrica referência em 5S":tot>80?"Em evolução":"Fábrica em risco";S.ph="end";
+$("#app").innerHTML=`<div class="hero"><h2>${win?"Vocês escaparam!":"O tempo acabou"}: ${S.team}</h2><div class="stars">${"⭐".repeat(tot>140?3:tot>80?2:1)}</div><h1>${tot} PTS</h1><b>${lv}</b>${win?"":"<p>A fábrica continua trancada, mas o que vocês melhoraram contou pontos.</p>"}</div>${panel()}
+<div class="card"><h3>Pontuação</h3><p>Pontos das salas: ${S.pts}<br>${L.join("<br>")||"Nenhum bônus."}</p></div>
+<div class="card"><h3>Reflexão final</h3><ul><li>Quais decisões deram mais resultado, as baratas ou as caras?</li><li>Qual senso foi mais importante para reduzir o retrabalho?</li><li>Por que Seiso e Shitsuke exigem repetição?</li><li>A prática da Toyota foi adotada inteira ou precisou de adaptação? Por quê?</li></ul></div>
+<button class="go" onclick="home()">Jogar de novo</button>`;window.scrollTo(0,0)}
+home();
+</script>
+</body>
+</html>
